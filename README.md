@@ -25,6 +25,21 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+### Splash screen
+
+El splash **nativo** en `app.json` está en blanco (solo color de fondo). El splash con **logo + "redarborTalent"** es el personalizado (React).
+
+**Si abres la app con Expo Go** verás primero el splash de Expo (chevron azul y "red-arbor-talent"). Eso es de Expo Go y **no se puede quitar** desde este proyecto. En la app se muestra un aviso cuando detecta Expo Go.
+
+**Para ver solo tu splash** (blanco → logo + redarborTalent → app), usa un build nativo:
+
+```bash
+npx expo prebuild
+npx expo run:android
+```
+
+O para iOS: `npx expo run:ios`. También puedes usar [EAS Build](https://docs.expo.dev/build/introduction/) para preview/producción.
+
 ## Get a fresh project
 
 When you're ready, run:

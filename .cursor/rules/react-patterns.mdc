@@ -1,0 +1,71 @@
+---
+description: 
+globs: **/*.tsx
+alwaysApply: false
+---
+
+# React Component Patterns
+
+## 1. File Naming (kebab-case)
+
+Component files use **kebab-case**, not PascalCase. PascalCase is only for component names inside the file.
+
+```
+✅ GOOD
+components/animated-splash/animated-splash.tsx
+components/user-profile/user-profile.tsx
+
+❌ BAD
+components/AnimatedSplash.tsx
+components/UserProfile.tsx
+```
+
+## 2. Named Exports (no default)
+
+Always use named exports, never `export default`.
+
+```tsx
+// ❌ BAD
+export default function AnimatedSplash() { ... }
+
+// ✅ GOOD
+export const AnimatedSplash = () => { ... }
+```
+
+## 3. Arrow Functions for Components
+
+Components must be arrow functions, not regular functions.
+
+```tsx
+// ❌ BAD
+function AnimatedSplash() {
+  return <View>...</View>;
+}
+
+// ✅ GOOD
+const AnimatedSplash = () => {
+  return <View>...</View>;
+};
+```
+
+## 4. Styles in Separate Files
+
+Styles live in a dedicated file next to the component, not inline in the component file.
+
+```
+✅ GOOD
+components/animated-splash/
+  animated-splash.tsx   ← component logic only
+  styles.ts            ← styles
+  constants.ts
+
+// animated-splash.tsx
+import { styles } from './styles';
+```
+
+```tsx
+// ❌ BAD - styles inside component file
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+});
+```

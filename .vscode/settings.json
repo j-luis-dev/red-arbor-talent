@@ -3,5 +3,28 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
-  }
+  },
+  "cSpell.words": [
+    "moti"
+  ],
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#d54a56",
+    "activityBar.background": "#d54a56",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#3ecf30",
+    "activityBarBadge.foreground": "#15202b",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#d54a56",
+    "statusBar.background": "#c02c39",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#d54a56",
+    "statusBarItem.remoteBackground": "#c02c39",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#c02c39",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#c02c3999",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#c02c39"
 }
