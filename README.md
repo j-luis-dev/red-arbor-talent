@@ -127,6 +127,45 @@ Con esto se mantiene un único idioma de referencia (inglés) en las keys y se r
 | `npm run ios`        | Abre en simulador iOS         |
 | `npm run android`    | Abre en emulador Android      |
 | `npm run lint`       | Ejecuta el linter             |
+| `npm test`           | Ejecuta las pruebas unitarias |
+| `npm run test:watch` | Ejecuta los tests en modo watch (se re-ejecutan al guardar cambios) |
+
+### Cómo ejecutar los tests
+
+1. **Instalar dependencias** (si aún no lo has hecho):
+
+   ```bash
+   npm install
+   ```
+
+   Si aparece un error de dependencias por la versión de React, usa:
+
+   ```bash
+   npm install --legacy-peer-deps
+   ```
+
+2. **Ejecutar todas las pruebas una vez:**
+
+   ```bash
+   npm test
+   ```
+
+   O con npx: `npx jest`
+
+3. **Modo watch** (útil mientras desarrollas; los tests se vuelven a ejecutar al guardar):
+
+   ```bash
+   npm run test:watch
+   ```
+
+4. **Ejecutar solo algunos tests** (por nombre de archivo o patrón):
+
+   ```bash
+   npx jest lib
+   npx jest navigation
+   ```
+
+Las pruebas incluyen: helpers (`lib/`), hooks (`use-debounce`), componentes (EmptyState, JobCard, FilterBar, etc.) y navegación (por ejemplo, que al pulsar una oferta se navegue al detalle con el id correcto).
 
 ---
 

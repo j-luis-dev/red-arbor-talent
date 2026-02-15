@@ -8,6 +8,14 @@ module.exports = defineConfig([
     ignores: ['dist/*'],
   },
   {
+    files: ['jest.setup.js'],
+    languageOptions: {
+      globals: {
+        jest: 'readonly',
+      },
+    },
+  },
+  {
     settings: {
       'import/resolver': {
         typescript: {},
