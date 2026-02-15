@@ -44,5 +44,7 @@
   "Action": "Action",
   "Share": "Share",
   "More": "More",
-  "Delete": "Delete"
+  "Delete": "Delete",
+  "Preferences": "Preferences",
+  "Dark mode": "Dark mode"
 }

@@ -1,11 +1,35 @@
-import { Tabs } from 'expo-router';
+import { DrawerActions } from '@react-navigation/native';
+import { Tabs, useNavigation } from 'expo-router';
 import React from 'react';
+import { Pressable } from 'react-native';
 
-import { HapticTab } from '@components/haptic-tab';
 import { IconSymbol } from '@components/ui/icon-symbol';
 import { Colors } from '@constants/theme';
 import { usePreferencesStore } from '@stores/preferences-store';
 import { useTranslation } from 'react-i18next';
+
+function DrawerHeaderButton() {
+  const navigation = useNavigation();
+  const colorScheme = usePreferencesStore((s) => s.colorScheme);
+  const color = Colors[colorScheme ?? 'light'].text;
+  return (
+    <Pressable
+      onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+      style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1, padding: 8 }]}>
+      <IconSymbol size={28} name="line.3.horizontal" color={color} />
+    </Pressable>
+  );
+}
+
+type TabIconProps = { color: string };
+
+const HomeTabIcon = ({ color }: TabIconProps) => (
+  <IconSymbol size={28} name="house.fill" color={color} />
+);
+
+const ExploreTabIcon = ({ color }: TabIconProps) => (
+  <IconSymbol size={28} name="paperplane.fill" color={color} />
+);
 
 export default function TabLayout() {
   const colorScheme = usePreferencesStore((s) => s.colorScheme);
@@ -17,20 +41,19 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: t('Home'),
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: HomeTabIcon,
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
           title: t('Explore'),
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ExploreTabIcon,
         }}
       />
     </Tabs>

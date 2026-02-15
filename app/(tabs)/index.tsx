@@ -1,22 +1,15 @@
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { Platform, StyleSheet } from 'react-native';
-import { SegmentedButtons } from 'react-native-paper';
 
 import { HelloWave } from '@components/hello-wave';
 import ParallaxScrollView from '@components/parallax-scroll-view';
 import { ThemedText } from '@components/themed-text';
 import { ThemedView } from '@components/themed-view';
-import type { ColorScheme, Locale } from '@stores/preferences-store';
-import { usePreferencesStore } from '@stores/preferences-store';
 import { useTranslation } from 'react-i18next';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
-  const colorScheme = usePreferencesStore((s) => s.colorScheme);
-  const setColorScheme = usePreferencesStore((s) => s.setColorScheme);
-  const locale = usePreferencesStore((s) => s.locale);
-  const setLocale = usePreferencesStore((s) => s.setLocale);
 
   return (
     <ParallaxScrollView
@@ -27,28 +20,6 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-      <ThemedView style={styles.settingsRow}>
-        <ThemedText type="subtitle">{t('Theme')}</ThemedText>
-        <SegmentedButtons
-          value={colorScheme ?? 'light'}
-          onValueChange={(v) => setColorScheme(v as ColorScheme)}
-          buttons={[
-            { value: 'light', label: t('Claro') },
-            { value: 'dark', label: t('Oscuro') },
-          ]}
-        />
-      </ThemedView>
-      <ThemedView style={styles.settingsRow}>
-        <ThemedText type="subtitle">{t('Language')}</ThemedText>
-        <SegmentedButtons
-          value={locale}
-          onValueChange={(v) => setLocale(v as Locale)}
-          buttons={[
-            { value: 'es', label: 'ES' },
-            { value: 'en', label: 'EN' },
-          ]}
-        />
-      </ThemedView>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">{t('Welcome!')}</ThemedText>
         <HelloWave />
@@ -110,10 +81,6 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  settingsRow: {
-    gap: 8,
-    marginBottom: 16,
-  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
