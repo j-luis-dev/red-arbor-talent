@@ -1,5 +1,4 @@
-import type { DrawerContentComponentProps } from '@react-navigation/drawer';
-import { Drawer } from 'expo-router/drawer';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
@@ -11,18 +10,14 @@ import { AppThemeProvider } from '@/components/app-theme-provider';
 import { Colors } from '@/constants/theme';
 import { i18n } from '@/lib/i18n';
 import { AnimatedSplash } from '@components/animated-splash';
-import { CustomDrawerContent } from '@components/drawer-content';
 import { usePreferencesStore } from '@stores/preferences-store';
 import { useSplashStore } from '@stores/splash-store';
-
-function renderDrawerContent(props: DrawerContentComponentProps) {
-  return <CustomDrawerContent {...props} />;
-}
 
 export default function RootLayout() {
   const colorScheme = usePreferencesStore((s) => s.colorScheme);
   const appReady = useSplashStore((s) => s.appReady);
   const locale = usePreferencesStore((s) => s.locale);
+  const headerTintColor = Colors[colorScheme ?? 'light'].text;
 
   useEffect(() => {
     i18n.changeLanguage(locale);
@@ -39,19 +34,24 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <AppThemeProvider>
           <View style={styles.container}>
-            <Drawer
-              drawerContent={renderDrawerContent}
+            <Stack
               screenOptions={{
                 headerShown: true,
-                headerTitle: 'Red Arbor Talent',
-                headerTintColor: Colors[colorScheme ?? 'light'].text,
+                headerTitle: 'Red Arbor Talent taco',
+                headerTintColor,
               }}>
-              <Drawer.Screen name="(tabs)" />
-              <Drawer.Screen
-                name="job/[id]"
-                options={{ headerShown: true, title: 'Detalle' }}
+              <Stack.Screen
+                name="(drawer)"
+                options={{ headerShown: false }}
               />
-            </Drawer>
+              <Stack.Screen
+                name="job/[id]"
+                options={{
+                  title: 'Detalle',
+                  headerBackTitle: undefined,
+                }}
+              />
+            </Stack>
             {!appReady && <AnimatedSplash />}
           </View>
           <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />

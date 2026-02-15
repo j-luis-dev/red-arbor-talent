@@ -5,12 +5,10 @@ import { useJobsStore } from '@stores/jobs-store';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Surface, Text } from 'react-native-paper';
 
 export default function FavoritosScreen() {
   const { t } = useTranslation();
-  const insets = useSafeAreaInsets();
   const jobs = useJobsStore((s) => s.jobs);
   const favoriteIds = useFavoritesStore((s) => s.favoriteIds);
   const favoriteJobs = useMemo(
@@ -20,7 +18,7 @@ export default function FavoritosScreen() {
 
   if (favoriteIds.length === 0) {
     return (
-      <Surface style={[styles.container, { paddingTop: insets.top }]}>
+      <Surface style={[styles.container]}>
         <EmptyState
           title={t('No favorites')}
           message={t('No favorites message')}
@@ -31,7 +29,7 @@ export default function FavoritosScreen() {
 
   if (favoriteJobs.length === 0) {
     return (
-      <Surface style={[styles.container, { paddingTop: insets.top }]}>
+      <Surface style={[styles.container]}>
         <EmptyState
           title={t('Loading favorites')}
           message={t('Loading favorites message')}
@@ -41,7 +39,7 @@ export default function FavoritosScreen() {
   }
 
   return (
-    <Surface style={[styles.container, { paddingTop: insets.top }]}>
+    <Surface style={[styles.container]}>
       <FlatList
         data={favoriteJobs}
         keyExtractor={(item) => String(item.id)}

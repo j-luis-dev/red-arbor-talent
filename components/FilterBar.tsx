@@ -1,12 +1,18 @@
 import type { JobType } from '@/types/remotive';
 import { useJobsStore } from '@stores/jobs-store';
 import React, { useCallback, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Chip, Menu, Searchbar } from 'react-native-paper';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { Button, Chip, Menu, Searchbar, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 
 export function FilterBar() {
   const { t } = useTranslation();
+  const theme = useTheme();
   const searchQuery = useJobsStore((s) => s.searchQuery);
   const setSearchQuery = useJobsStore((s) => s.setSearchQuery);
   const categories = useJobsStore((s) => s.categories);
@@ -43,6 +49,8 @@ export function FilterBar() {
     { value: 'company' as const, label: t('By company') },
   ];
 
+  const categoryMenuMaxHeight = Dimensions.get('window').height * 0.5;
+
   return (
     <View style={styles.wrapper}>
       <Searchbar
@@ -61,6 +69,7 @@ export function FilterBar() {
         <Menu
           visible={categoryOpen}
           onDismiss={() => setCategoryOpen(false)}
+          contentStyle={{ maxHeight: categoryMenuMaxHeight }}
           anchor={
             <Button
               mode="outlined"
@@ -72,23 +81,29 @@ export function FilterBar() {
             </Button>
           }
         >
-          <Menu.Item
-            onPress={() => {
-              setSelectedCategory(null);
-              setCategoryOpen(false);
-            }}
-            title={t('All')}
-          />
-          {categoryNames.map((name) => (
+          <ScrollView
+            style={{ maxHeight: categoryMenuMaxHeight }}
+            nestedScrollEnabled
+            keyboardShouldPersistTaps="handled"
+          >
             <Menu.Item
-              key={name}
               onPress={() => {
-                setSelectedCategory(name);
+                setSelectedCategory(null);
                 setCategoryOpen(false);
               }}
-              title={name}
+              title={t('All')}
             />
-          ))}
+            {categoryNames.map((name) => (
+              <Menu.Item
+                key={name}
+                onPress={() => {
+                  setSelectedCategory(name);
+                  setCategoryOpen(false);
+                }}
+                title={name}
+              />
+            ))}
+          </ScrollView>
         </Menu>
         {jobTypes.map(({ value, label }) => (
           <Chip
@@ -97,6 +112,12 @@ export function FilterBar() {
             onPress={() => setSelectedJobType(value)}
             style={styles.chip}
             compact
+            theme={{
+              colors: {
+                secondaryContainer: theme.colors.primaryContainer,
+                onSecondaryContainer: theme.colors.onPrimaryContainer,
+              },
+            }}
           >
             {label}
           </Chip>

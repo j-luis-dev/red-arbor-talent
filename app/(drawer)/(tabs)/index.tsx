@@ -3,23 +3,14 @@ import { ErrorState } from '@components/ErrorState';
 import { FilterBar } from '@components/FilterBar';
 import { JobCard } from '@components/JobCard';
 import { JobListSkeleton } from '@components/JobListSkeleton';
-import {
-  useFilteredJobs,
-  useJobsStore,
-} from '@stores/jobs-store';
+import { useFilteredJobs, useJobsStore } from '@stores/jobs-store';
 import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  FlatList,
-  RefreshControl,
-  StyleSheet,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { Surface } from 'react-native-paper';
 
 export default function JobsListScreen() {
   const { t } = useTranslation();
-  const insets = useSafeAreaInsets();
   const filteredJobs = useFilteredJobs();
   const loading = useJobsStore((s) => s.loading);
   const error = useJobsStore((s) => s.error);
@@ -31,13 +22,11 @@ export default function JobsListScreen() {
     loadCategories();
   }, [loadJobs, loadCategories]);
 
-  const onRefresh = useCallback(() => {
-    loadJobs();
-  }, [loadJobs]);
+  const onRefresh = useCallback(() => loadJobs(), [loadJobs]);
 
   if (error && filteredJobs.length === 0) {
     return (
-      <Surface style={[styles.container, { paddingTop: insets.top }]}>
+      <Surface style={styles.container}>
         <FilterBar />
         <ErrorState />
       </Surface>
@@ -46,7 +35,7 @@ export default function JobsListScreen() {
 
   if (loading && filteredJobs.length === 0) {
     return (
-      <Surface style={[styles.container, { paddingTop: insets.top }]}>
+      <Surface style={styles.container}>
         <FilterBar />
         <JobListSkeleton />
       </Surface>
@@ -54,7 +43,7 @@ export default function JobsListScreen() {
   }
 
   return (
-    <Surface style={[styles.container, { paddingTop: insets.top }]}>
+    <Surface style={styles.container}>
       <FilterBar />
       <FlatList
         data={filteredJobs}
@@ -62,10 +51,7 @@ export default function JobsListScreen() {
         renderItem={({ item, index }) => <JobCard job={item} index={index} />}
         contentContainerStyle={styles.list}
         ListEmptyComponent={
-          <EmptyState
-            title={t('No results')}
-            message={t('No results message')}
-          />
+          <EmptyState title={t('No results')} message={t('No results message')} />
         }
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={onRefresh} />
