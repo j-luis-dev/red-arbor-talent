@@ -47,6 +47,10 @@ export default function RootLayout() {
                 headerTintColor: Colors[colorScheme ?? 'light'].text,
               }}>
               <Drawer.Screen name="(tabs)" />
+              <Drawer.Screen
+                name="job/[id]"
+                options={{ headerShown: true, title: 'Detalle' }}
+              />
             </Drawer>
             {!appReady && <AnimatedSplash />}
           </View>

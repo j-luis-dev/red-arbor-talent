@@ -12,6 +12,8 @@ const MAPPING = {
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'line.3.horizontal': 'menu',
+  'briefcase.fill': 'work',
+  'heart.fill': 'favorite',
 } as IconMapping;
 
 export type IconSymbolProps = Readonly<

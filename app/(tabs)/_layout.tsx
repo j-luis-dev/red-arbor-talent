@@ -23,8 +23,12 @@ function DrawerHeaderButton() {
 
 type TabIconProps = { color: string };
 
-const HomeTabIcon = ({ color }: TabIconProps) => (
-  <IconSymbol size={28} name="house.fill" color={color} />
+const JobsTabIcon = ({ color }: TabIconProps) => (
+  <IconSymbol size={28} name="briefcase.fill" color={color} />
+);
+
+const FavoritosTabIcon = ({ color }: TabIconProps) => (
+  <IconSymbol size={28} name="heart.fill" color={color} />
 );
 
 const ExploreTabIcon = ({ color }: TabIconProps) => (
@@ -45,8 +49,15 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: t('Home'),
-          tabBarIcon: HomeTabIcon,
+          title: t('Jobs'),
+          tabBarIcon: JobsTabIcon,
+        }}
+      />
+      <Tabs.Screen
+        name="favoritos"
+        options={{
+          title: t('Favorites'),
+          tabBarIcon: FavoritosTabIcon,
         }}
       />
       <Tabs.Screen
