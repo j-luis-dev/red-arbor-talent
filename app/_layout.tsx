@@ -5,9 +5,9 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { AppThemeProvider } from '@/components/app-theme-provider';
 import { i18n } from '@/lib/i18n';
 import { AnimatedSplash } from '@components/animated-splash';
-import { AppThemeProvider } from '@components/app-theme-provider';
 import { usePreferencesStore } from '@stores/preferences-store';
 import { useSplashStore } from '@stores/splash-store';
 
