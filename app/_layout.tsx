@@ -1,21 +1,24 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { i18n } from '@/lib/i18n';
 import { AnimatedSplash } from '@components/animated-splash';
-import { useColorScheme } from '@hooks/use-color-scheme';
+import { AppThemeProvider } from '@components/app-theme-provider';
+import { usePreferencesStore } from '@stores/preferences-store';
 import { useSplashStore } from '@stores/splash-store';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
-
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = usePreferencesStore((s) => s.colorScheme);
   const appReady = useSplashStore((s) => s.appReady);
+  const locale = usePreferencesStore((s) => s.locale);
+
+  useEffect(() => {
+    i18n.changeLanguage(locale);
+  }, [locale]);
 
   useEffect(() => {
     if (appReady) {
@@ -24,15 +27,17 @@ export default function RootLayout() {
   }, [appReady]);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <View style={styles.container}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-        {!appReady && <AnimatedSplash />}
-      </View>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <AppThemeProvider>
+        <View style={styles.container}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+          {!appReady && <AnimatedSplash />}
+        </View>
+        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+      </AppThemeProvider>
+    </SafeAreaProvider>
   );
 }
 

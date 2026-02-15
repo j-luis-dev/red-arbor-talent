@@ -1,0 +1,70 @@
+---
+description: Reglas de internacionalización - keys como texto y variables explícitas
+globs: "**/{locales,i18n,translations,lang}/**"
+alwaysApply: true
+---
+
+# Reglas de Internacionalización (i18n)
+
+Esta regla aplica únicamente a este proyecto.
+
+## 1. Keys = Texto a renderizar
+
+Las keys de traducción deben ser **exactamente el mismo texto** que se muestra en el idioma base (inglés).
+
+```json
+// en.json ✅
+{
+  "Hi brother": "Hi brother"
+}
+
+// mx.json ✅
+{
+  "Hi brother": "Hola hermano"
+}
+```
+
+```json
+// ❌ BAD - keys genéricas o abreviadas
+{
+  "greeting_brother": "Hi brother",
+  "hiBro": "Hi brother"
+}
+```
+
+## 2. Variables explícitas en la key
+
+Cuando la traducción incluye variables, la key debe **incluir explícitamente** el placeholder de la variable usando la sintaxis `{{variable}}`.
+
+```json
+// en.json ✅
+{
+  "Hi user {{name}}": "Hi user {{name}}"
+}
+
+// mx.json ✅
+{
+  "Hi user {{name}}": "Hola usuario {{name}}"
+}
+```
+
+```json
+// ❌ BAD - variable no explícita en la key
+{
+  "Hi user": "Hi user {{name}}"
+}
+```
+
+### Ejemplo con múltiples variables
+
+```json
+// en.json
+{
+  "Hi user {{name}}, you have {{count}} messages": "Hi user {{name}}, you have {{count}} messages"
+}
+
+// mx.json
+{
+  "Hi user {{name}}, you have {{count}} messages": "Hola usuario {{name}}, tienes {{count}} mensajes"
+}
+```

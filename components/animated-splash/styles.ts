@@ -1,11 +1,7 @@
 import { StyleSheet } from 'react-native';
-
-import { SplashColors } from '@constants/splash';
-
 export const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: SplashColors.background,
     justifyContent: 'center',
     alignItems: 'center',
   },
