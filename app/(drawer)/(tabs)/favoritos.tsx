@@ -1,14 +1,20 @@
-import { EmptyState } from '@components/EmptyState';
-import { JobCard } from '@components/JobCard';
+import { EmptyState } from '@components/empty-state';
+import { JobCard } from '@components/job-card';
 import { useFavoritesStore } from '@stores/favorites-store';
 import { useJobsStore } from '@stores/jobs-store';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, StyleSheet } from 'react-native';
 import { Surface, Text } from 'react-native-paper';
+import Animated, {
+  FadeOut,
+  LinearTransition,
+  useReducedMotion,
+} from 'react-native-reanimated';
 
 export default function FavoritosScreen() {
   const { t } = useTranslation();
+  const reduceMotion = useReducedMotion();
   const jobs = useJobsStore((s) => s.jobs);
   const favoriteIds = useFavoritesStore((s) => s.favoriteIds);
   const favoriteJobs = useMemo(
@@ -43,7 +49,14 @@ export default function FavoritosScreen() {
       <FlatList
         data={favoriteJobs}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item, index }) => <JobCard job={item} index={index} />}
+        renderItem={({ item, index }) => (
+          <Animated.View
+            exiting={reduceMotion ? undefined : FadeOut.duration(250)}
+            layout={reduceMotion ? undefined : LinearTransition.duration(200)}
+          >
+            <JobCard job={item} index={index} />
+          </Animated.View>
+        )}
         contentContainerStyle={styles.list}
         ListHeaderComponent={
           <Text variant="bodySmall" style={styles.count}>

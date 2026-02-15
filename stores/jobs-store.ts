@@ -1,15 +1,22 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useMemo } from 'react';
-import { create } from 'zustand';
-import type { Category, Job, JobType } from '@/types/remotive';
+import { filterAndSort, type SortByOption } from '@/lib/filter-jobs';
 import {
   fetchCategories,
   fetchJobs,
   RemotiveApiError,
 } from '@/services/remotive';
+import type { Category, Job, JobType } from '@/types/remotive';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMemo } from 'react';
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
-const JOBS_CACHE_KEY = '@jobs_cache';
-const CATEGORIES_CACHE_KEY = '@categories_cache';
+const JOBS_STORE_KEY = '@jobs-store';
+
+function getLoadJobsErrorMessage(err: unknown): string {
+  return err instanceof RemotiveApiError
+    ? err.message
+    : 'Error de red. Comprueba tu conexión e intenta de nuevo.';
+}
 
 interface JobsState {
   jobs: Job[];
@@ -20,135 +27,82 @@ interface JobsState {
   searchQuery: string;
   selectedCategory: string | null;
   selectedJobType: JobType | null;
-  sortBy: 'date' | 'company' | null;
+  sortBy: SortByOption;
   loadJobs: () => Promise<void>;
   loadCategories: () => Promise<void>;
   setSearchQuery: (q: string) => void;
   setSelectedCategory: (category: string | null) => void;
   setSelectedJobType: (type: JobType | null) => void;
-  setSortBy: (sort: 'date' | 'company' | null) => void;
+  setSortBy: (sort: SortByOption) => void;
   clearError: () => void;
 }
 
-function filterAndSort(
-  jobs: Job[],
-  searchQuery: string,
-  selectedCategory: string | null,
-  selectedJobType: JobType | null,
-  sortBy: 'date' | 'company' | null
-): Job[] {
-  let result = [...jobs];
-  const q = searchQuery.trim().toLowerCase();
-  if (q) {
-    result = result.filter(
-      (j) =>
-        j.title.toLowerCase().includes(q) ||
-        j.company_name.toLowerCase().includes(q)
-    );
-  }
-  if (selectedCategory) {
-    result = result.filter((j) => j.category === selectedCategory);
-  }
-  if (selectedJobType) {
-    result = result.filter((j) => j.job_type === selectedJobType);
-  }
-  if (sortBy === 'date') {
-    result.sort(
-      (a, b) =>
-        new Date(b.publication_date).getTime() -
-        new Date(a.publication_date).getTime()
-    );
-  } else if (sortBy === 'company') {
-    result.sort((a, b) =>
-      a.company_name.localeCompare(b.company_name, undefined, {
-        sensitivity: 'base',
-      })
-    );
-  }
-  return result;
-}
+type PersistedSlice = Pick<
+  JobsState,
+  | 'jobs'
+  | 'categories'
+  | 'searchQuery'
+  | 'selectedCategory'
+  | 'selectedJobType'
+  | 'sortBy'
+>;
 
-export const useJobsStore = create<JobsState>((set, get) => ({
-  jobs: [],
-  categories: [],
-  loading: false,
-  error: null,
-  isRevalidating: false,
-  searchQuery: '',
-  selectedCategory: null,
-  selectedJobType: null,
-  sortBy: null,
+export const useJobsStore = create<JobsState>()(
+  persist(
+    (set, get) => ({
+      jobs: [],
+      categories: [],
+      loading: false,
+      error: null,
+      isRevalidating: false,
+      searchQuery: '',
+      selectedCategory: null,
+      selectedJobType: null,
+      sortBy: null,
 
-  setSearchQuery: (searchQuery) => set({ searchQuery }),
-  setSelectedCategory: (selectedCategory) => set({ selectedCategory }),
-  setSelectedJobType: (selectedJobType) => set({ selectedJobType }),
-  setSortBy: (sortBy) => set({ sortBy }),
-  clearError: () => set({ error: null }),
+      setSearchQuery: (searchQuery) => set({ searchQuery }),
+      setSelectedCategory: (selectedCategory) => set({ selectedCategory }),
+      setSelectedJobType: (selectedJobType) => set({ selectedJobType }),
+      setSortBy: (sortBy) => set({ sortBy }),
+      clearError: () => set({ error: null }),
 
-  loadCategories: async () => {
-    try {
-      const categories = await fetchCategories();
-      set({ categories });
-      await AsyncStorage.setItem(
-        CATEGORIES_CACHE_KEY,
-        JSON.stringify(categories)
-      );
-    } catch {
-      try {
-        const cached = await AsyncStorage.getItem(CATEGORIES_CACHE_KEY);
-        if (cached) {
-          const categories = JSON.parse(cached) as Category[];
-          set({ categories });
-        }
-      } catch {
-        set({ categories: [] });
-      }
-    }
-  },
-
-  loadJobs: async () => {
-    const state = get();
-    if (state.jobs.length === 0 && !state.loading) {
-      try {
-        const cached = await AsyncStorage.getItem(JOBS_CACHE_KEY);
-        if (cached) {
-          const jobs = JSON.parse(cached) as Job[];
-          set({ jobs, isRevalidating: true });
-        }
-      } catch {
-        // ignore
-      }
-    }
-
-    set({ loading: true, error: null });
-    try {
-      const jobs = await fetchJobs();
-      set({ jobs, loading: false, isRevalidating: false });
-      await AsyncStorage.setItem(JOBS_CACHE_KEY, JSON.stringify(jobs));
-    } catch (err) {
-      const message =
-        err instanceof RemotiveApiError
-          ? err.message
-          : 'Error de red. Comprueba tu conexión e intenta de nuevo.';
-      set({
-        loading: false,
-        error: message,
-        isRevalidating: false,
-      });
-      if (get().jobs.length === 0) {
+      loadCategories: async () => {
         try {
-          const cached = await AsyncStorage.getItem(JOBS_CACHE_KEY);
-          if (cached) {
-            const jobs = JSON.parse(cached) as Job[];
-            set({ jobs });
-          }
+          const categories = await fetchCategories();
+          set({ categories });
         } catch {
-          // ignore
+          set({ categories: [] });
         }
-      }
+      },
+
+      loadJobs: async () => {
+        set({ loading: true, error: null });
+        try {
+          const jobs = await fetchJobs();
+          set({ jobs, loading: false, isRevalidating: false });
+        } catch (err) {
+          set({
+            loading: false,
+            error: getLoadJobsErrorMessage(err),
+            isRevalidating: false,
+          });
+        }
+      },
+    }),
+    {
+      name: JOBS_STORE_KEY,
+      storage: createJSONStorage(() => AsyncStorage),
+      partialize: (state): PersistedSlice => ({
+        jobs: state.jobs,
+        categories: state.categories,
+        searchQuery: state.searchQuery,
+        selectedCategory: state.selectedCategory,
+        selectedJobType: state.selectedJobType,
+        sortBy: state.sortBy,
+      }),
     }
-  },
-}));
+  )
+);
 
 export function useFilteredJobs(): Job[] {
   const jobs = useJobsStore((s) => s.jobs);

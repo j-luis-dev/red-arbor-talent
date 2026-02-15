@@ -39,6 +39,7 @@ export default function RootLayout() {
                 headerShown: true,
                 headerTitle: 'Red Arbor Talent taco',
                 headerTintColor,
+                animation: 'fade',
               }}>
               <Stack.Screen
                 name="(drawer)"
@@ -48,7 +49,7 @@ export default function RootLayout() {
                 name="job/[id]"
                 options={{
                   title: 'Detalle',
-                  headerBackTitle: undefined,
+                  headerBackTitle: '',
                 }}
               />
             </Stack>

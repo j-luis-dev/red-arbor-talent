@@ -18,7 +18,7 @@ const IGNORED_DOM_TAGS = [
   'button',
 ];
 
-export function JobDescription({ html }: JobDescriptionProps) {
+export const JobDescription = ({ html }: JobDescriptionProps) => {
   const theme = useTheme();
   const { width } = useWindowDimensions();
 
@@ -51,4 +51,4 @@ export function JobDescription({ html }: JobDescriptionProps) {
       enableExperimentalMarginCollapsing
     />
   );
-}
+};

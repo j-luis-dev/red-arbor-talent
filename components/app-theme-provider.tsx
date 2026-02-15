@@ -17,7 +17,9 @@ const { LightTheme: AdaptedLightTheme, DarkTheme: AdaptedDarkTheme } =
     materialDark: darkPaperTheme,
   });
 
-export function AppThemeProvider({ children }: Readonly<PropsWithChildren>) {
+export const AppThemeProvider = ({
+  children,
+}: Readonly<PropsWithChildren>) => {
   const colorScheme = usePreferencesStore((s) => s.colorScheme);
   const paperTheme = getAppPaperTheme(colorScheme ?? 'light');
   const navigationTheme =
@@ -28,4 +30,4 @@ export function AppThemeProvider({ children }: Readonly<PropsWithChildren>) {
       <ThemeProvider value={navigationTheme}>{children}</ThemeProvider>
     </PaperProvider>
   );
-}
+};

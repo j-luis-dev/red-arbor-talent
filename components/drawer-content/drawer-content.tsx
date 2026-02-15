@@ -2,22 +2,25 @@ import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import {
   Divider,
   SegmentedButtons,
   Switch,
   Text,
-  useTheme
+  useTheme,
 } from 'react-native-paper';
 
 import { BrandText } from '@components/animated-splash/brand-text';
 import type { ColorScheme } from '@stores/preferences-store';
 import { usePreferencesStore } from '@stores/preferences-store';
 
-const LOGO_SIZE = 80;
+import { LOGO_SIZE } from './constants';
+import { styles } from './styles';
 
-export function CustomDrawerContent(props: DrawerContentComponentProps) {
+export const CustomDrawerContent = (
+  props: DrawerContentComponentProps
+) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const colorScheme = usePreferencesStore((s) => s.colorScheme);
@@ -26,7 +29,7 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
   const setLocale = usePreferencesStore((s) => s.setLocale);
 
   const handleColorSchemeChange = (value: boolean) => {
-    setColorScheme(value ? 'dark' : 'light' as ColorScheme);
+    setColorScheme((value ? 'dark' : 'light') as ColorScheme);
   };
 
   return (
@@ -35,7 +38,8 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
       contentContainerStyle={[
         styles.scrollContent,
         { backgroundColor: theme.colors.surface },
-      ]}>
+      ]}
+    >
       <View style={styles.header}>
         <View
           style={[
@@ -47,7 +51,8 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
               overflow: 'hidden',
               backgroundColor: theme.colors.surfaceVariant,
             },
-          ]}>
+          ]}
+        >
           <Image
             source={require('@assets/images/splash-icon.png')}
             style={styles.logoImage}
@@ -90,46 +95,4 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
       </View>
     </DrawerContentScrollView>
   );
-}
-
-const styles = StyleSheet.create({
-  scrollContent: {
-    flexGrow: 1,
-    paddingBottom: 24,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-    paddingVertical: 24,
-    paddingHorizontal: 16,
-  },
-  logoCircle: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoImage: {
-    width: LOGO_SIZE - 16,
-    height: LOGO_SIZE - 16,
-  },
-  divider: {
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  section: {
-    paddingHorizontal: 16,
-    gap: 12,
-  },
-  sectionLabel: {
-    opacity: 0.7,
-    marginBottom: 4,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  segmentedButtons: {
-    width: 50,
-  },
-});
+};

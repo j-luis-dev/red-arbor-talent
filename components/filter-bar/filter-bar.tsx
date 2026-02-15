@@ -1,61 +1,44 @@
-import type { JobType } from '@/types/remotive';
-import { useJobsStore } from '@stores/jobs-store';
-import React, { useCallback, useState } from 'react';
-import {
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import React from 'react';
+import { ScrollView, View } from 'react-native';
 import { Button, Chip, Menu, Searchbar, useTheme } from 'react-native-paper';
-import { useTranslation } from 'react-i18next';
 
-export function FilterBar() {
-  const { t } = useTranslation();
+import { styles } from './styles';
+import { useFilterBar } from './use-filter-bar';
+
+export const FilterBar = () => {
   const theme = useTheme();
-  const searchQuery = useJobsStore((s) => s.searchQuery);
-  const setSearchQuery = useJobsStore((s) => s.setSearchQuery);
-  const categories = useJobsStore((s) => s.categories);
-  const selectedCategory = useJobsStore((s) => s.selectedCategory);
-  const setSelectedCategory = useJobsStore((s) => s.setSelectedCategory);
-  const selectedJobType = useJobsStore((s) => s.selectedJobType);
-  const setSelectedJobType = useJobsStore((s) => s.setSelectedJobType);
-  const sortBy = useJobsStore((s) => s.sortBy);
-  const setSortBy = useJobsStore((s) => s.setSortBy);
+  const {
+    t,
+    localSearch,
+    handleSearch,
+    categoryOpen,
+    setCategoryOpen,
+    sortOpen,
+    setSortOpen,
+    categoryNames,
+    selectedCategory,
+    setSelectedCategory,
+    sortLabel,
+    jobTypes,
+    selectedJobType,
+    setSelectedJobType,
+    sortOptions,
+    setSortBy,
+    categoryMenuMaxHeight,
+  } = useFilterBar();
 
-  const [categoryOpen, setCategoryOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false);
-
-  const handleSearch = useCallback((q: string) => setSearchQuery(q), [setSearchQuery]);
-
-  const categoryNames = categories.map((c) => c.name);
-  const sortLabel =
-    [
-      { value: null as const, label: t('No sort') },
-      { value: 'date' as const, label: t('By date') },
-      { value: 'company' as const, label: t('By company') },
-    ].find((o) => o.value === sortBy)?.label ?? t('Sort by');
-
-  const jobTypes: { value: JobType | null; label: string }[] = [
-    { value: null, label: t('All') },
-    { value: 'full_time', label: t('Full time') },
-    { value: 'part_time', label: t('Part time') },
-    { value: 'contract', label: t('Contract') },
-    { value: 'freelance', label: t('Freelance') },
-  ];
-  const sortOptions = [
-    { value: null as const, label: t('No sort') },
-    { value: 'date' as const, label: t('By date') },
-    { value: 'company' as const, label: t('By company') },
-  ];
-
-  const categoryMenuMaxHeight = Dimensions.get('window').height * 0.5;
+  const chipTheme = {
+    colors: {
+      secondaryContainer: theme.colors.primaryContainer,
+      onSecondaryContainer: theme.colors.onPrimaryContainer,
+    },
+  };
 
   return (
     <View style={styles.wrapper}>
       <Searchbar
         placeholder={t('Search jobs placeholder')}
-        value={searchQuery}
+        value={localSearch}
         onChangeText={handleSearch}
         style={styles.search}
         accessibilityLabel={t('Search jobs label')}
@@ -112,12 +95,7 @@ export function FilterBar() {
             onPress={() => setSelectedJobType(value)}
             style={styles.chip}
             compact
-            theme={{
-              colors: {
-                secondaryContainer: theme.colors.primaryContainer,
-                onSecondaryContainer: theme.colors.onPrimaryContainer,
-              },
-            }}
+            theme={chipTheme}
           >
             {label}
           </Chip>
@@ -151,17 +129,4 @@ export function FilterBar() {
       </ScrollView>
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  wrapper: { paddingHorizontal: 16, paddingVertical: 8, gap: 8 },
-  search: { marginBottom: 4 },
-  chips: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingVertical: 4,
-  },
-  chip: { marginRight: 0 },
-  anchorButton: { marginRight: 4 },
-});
+};

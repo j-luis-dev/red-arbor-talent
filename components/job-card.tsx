@@ -1,3 +1,4 @@
+import { formatDate } from '@/lib/date';
 import type { Job } from '@/types/remotive';
 import { useFavoritesStore } from '@stores/favorites-store';
 import { useRouter } from 'expo-router';
@@ -8,27 +9,14 @@ import { useReducedMotion } from 'react-native-reanimated';
 import { Card, IconButton, Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 
-import { CompanyLogo } from '@components/CompanyLogo';
+import { CompanyLogo } from '@components/company-logo';
 
 interface JobCardProps {
   readonly job: Job;
   readonly index?: number;
 }
 
-function formatDate(iso: string): string {
-  try {
-    const d = new Date(iso);
-    return d.toLocaleDateString(undefined, {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    });
-  } catch {
-    return iso;
-  }
-}
-
-export function JobCard({ job, index = 0 }: JobCardProps) {
+export const JobCard = ({ job, index = 0 }: JobCardProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const router = useRouter();
@@ -100,7 +88,7 @@ export function JobCard({ job, index = 0 }: JobCardProps) {
       </Card>
     </MotiView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   card: { marginHorizontal: 16, marginVertical: 6 },

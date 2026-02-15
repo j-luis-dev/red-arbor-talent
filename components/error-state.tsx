@@ -6,7 +6,7 @@ import { useReducedMotion } from 'react-native-reanimated';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 
-export function ErrorState() {
+export const ErrorState = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
@@ -50,7 +50,7 @@ export function ErrorState() {
       </Button>
     </MotiView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

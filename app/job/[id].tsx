@@ -1,28 +1,17 @@
+import { formatDate } from '@/lib/date';
 import { isSafeUrl } from '@/services/remotive';
-import { CompanyLogo } from '@components/CompanyLogo';
-import { JobDescription } from '@components/JobDescription';
+import { CompanyLogo } from '@components/company-logo';
+import { JobDescription } from '@components/job-description';
 import { useFavoritesStore } from '@stores/favorites-store';
 import { useJobsStore } from '@stores/jobs-store';
-import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import React from 'react';
-import { Linking, ScrollView, Share, StyleSheet, View } from 'react-native';
-import { useReducedMotion } from 'react-native-reanimated';
-import { Button, IconButton, Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
-
-function formatDate(iso: string): string {
-  try {
-    return new Date(iso).toLocaleDateString(undefined, {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-  } catch {
-    return iso;
-  }
-}
+import { Linking, ScrollView, Share, StyleSheet, View } from 'react-native';
+import { Button, IconButton, Text, useTheme } from 'react-native-paper';
+import { useReducedMotion } from 'react-native-reanimated';
 
 export default function JobDetailScreen() {
   const { t } = useTranslation();
@@ -123,7 +112,11 @@ export default function JobDetailScreen() {
               {job.job_type.replace('_', ' ')}
             </Text>
             <Text variant="bodySmall" style={styles.meta}>
-              {formatDate(job.publication_date)}
+              {formatDate(job.publication_date, {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
             </Text>
             {job.salary ? (
               <Text variant="bodyMedium" style={styles.salary}>

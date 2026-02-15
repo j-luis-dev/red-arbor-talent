@@ -1,15 +1,15 @@
 import { MotiView } from 'moti';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { useReducedMotion } from 'react-native-reanimated';
 import { Surface, Text, useTheme } from 'react-native-paper';
+import { useReducedMotion } from 'react-native-reanimated';
 
 interface EmptyStateProps {
   readonly title: string;
   readonly message?: string;
 }
 
-export function EmptyState({ title, message }: EmptyStateProps) {
+export const EmptyState = ({ title, message }: EmptyStateProps) => {
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
 
@@ -39,7 +39,7 @@ export function EmptyState({ title, message }: EmptyStateProps) {
       </Surface>
     </MotiView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   wrapper: {

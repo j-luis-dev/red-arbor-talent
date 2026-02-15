@@ -1,8 +1,8 @@
-import { EmptyState } from '@components/EmptyState';
-import { ErrorState } from '@components/ErrorState';
-import { FilterBar } from '@components/FilterBar';
-import { JobCard } from '@components/JobCard';
-import { JobListSkeleton } from '@components/JobListSkeleton';
+import { EmptyState } from '@components/empty-state';
+import { ErrorState } from '@components/error-state';
+import { FilterBar } from '@components/filter-bar';
+import { JobCard } from '@components/job-card';
+import { JobListSkeleton } from '@components/job-list-skeleton';
 import { useFilteredJobs, useJobsStore } from '@stores/jobs-store';
 import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';

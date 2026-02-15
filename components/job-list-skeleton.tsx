@@ -6,7 +6,7 @@ import { Surface, useTheme } from 'react-native-paper';
 
 const SKELETON_COUNT = 6;
 
-export function JobListSkeleton() {
+export const JobListSkeleton = () => {
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
 
@@ -70,7 +70,7 @@ export function JobListSkeleton() {
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
