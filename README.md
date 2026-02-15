@@ -2,6 +2,15 @@
 
 App móvil para explorar ofertas de trabajo remoto, con favoritos, búsqueda, filtros y soporte para inglés y español.
 
+
+## IOS
+![Screen Recording 2026-02-15 at 2 48 47 AM](https://github.com/user-attachments/assets/a115d436-9746-425b-b878-5e9a1bd848b4)
+
+---
+
+## Android
+![Screen Recording 2026-02-15 at 2 54 07 AM](https://github.com/user-attachments/assets/26e6723b-7400-40cd-a4b4-83581cfacc34)
+
 ---
 
 ## Cómo ejecutar la aplicación
