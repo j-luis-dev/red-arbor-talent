@@ -48,7 +48,7 @@
     "react-native-gesture-handler": "~2.28.0",
     "react-native-paper": "^5.15.0",
     "react-native-reanimated": "~4.1.1",
-    "react-native-worklets": "~0.5.0",
+    "react-native-worklets": "0.5.1",
     "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screen-transitions": "^3.2.1",
@@ -64,6 +64,9 @@
     "patch-package": "^8.0.1",
     "sharp": "^0.34.5",
     "typescript": "~5.9.2"
+  },
+  "overrides": {
+    "react-native-worklets": "0.5.1"
   },
   "private": true
 }
