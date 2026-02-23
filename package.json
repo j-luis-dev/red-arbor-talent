@@ -13,7 +13,8 @@
     "lint": "expo lint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "doctor": "npx -y react-doctor@latest ."
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",

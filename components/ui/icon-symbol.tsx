@@ -1,5 +1,5 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { SymbolViewProps, SymbolWeight } from 'expo-symbols';
+import { SymbolViewProps } from 'expo-symbols';
 import { ComponentProps } from 'react';
 
 type MaterialIconsProps = ComponentProps<typeof MaterialIcons>;
@@ -19,10 +19,9 @@ const MAPPING = {
 export type IconSymbolProps = Readonly<
   Omit<MaterialIconsProps, 'name'> & {
     name: IconSymbolName;
-    weight?: SymbolWeight;
   }
 >;
 
-export const IconSymbol = ({ name, weight: _weight, ...rest }: IconSymbolProps) => (
+export const IconSymbol = ({ name, ...rest }: IconSymbolProps) => (
   <MaterialIcons {...rest} name={MAPPING[name]} />
 );
